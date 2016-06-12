@@ -21,6 +21,10 @@ echo "# Dependencies per class"
 (cd "${DEP_ROOTDIR}" && wc -l * | sort -nr)
 echo
 
-echo "15 most dependent classes"
+echo "TOP-15 of the most frequent dependencies"
+(cd "${DEP_ROOTDIR}" && cat * | sort | uniq -c | sort -nr | head -n 15)
+echo
+
+echo "TOP-15 of the most dependent classes"
 (cd "${DEP_ROOTDIR}" && cat * | awk '{print $3}' | sort | uniq -c | sort -nr | head -n 15)
 echo
