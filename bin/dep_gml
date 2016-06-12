@@ -42,7 +42,8 @@ END {
         print "]";
 }
 EOF
-))
+  ))
+
 else
   (cd "${DEP_ROOTDIR}" && cat "$1" | awk -f <(
    cat << 'EOF'
@@ -76,5 +77,5 @@ END {
         print "]";
 }
 EOF
-))
+  ))
 fi

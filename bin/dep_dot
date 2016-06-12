@@ -10,19 +10,20 @@ if [ ! -d "${DEP_ROOTDIR}" ]; then
 fi
 
 if [ $# -eq 0 ]; then
-(cd "${DEP_ROOTDIR}" && cat * | awk -f <(
-cat << 'EOF'
+  (cd "${DEP_ROOTDIR}" && cat * | awk -f <(
+   cat << 'EOF'
 BEGIN { print "digraph{" }
 { print "\""$1"\" -> \""$3"\"" }
 END { print "}"}
 EOF
-))
+  ))
+
 else
-(cd "${DEP_ROOTDIR}" && cat "$1" | awk -f <(
-cat << 'EOF'
+  (cd "${DEP_ROOTDIR}" && cat "$1" | awk -f <(
+   cat << 'EOF'
 BEGIN { print "digraph{" }
 { print "\""$1"\" -> \""$3"\"" }
 END { print "}"}
 EOF
-))
+  ))
 fi
