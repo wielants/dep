@@ -16,7 +16,7 @@ The intended workflow is something like this:
 - dep_stats_uniq (show the number of dependent classes which were added the the session because a class was added to the session)
 - dep_dot (stdout the contents of a graphviz dot file from the dependencies of some classes in the session)
 - dep_gml (stdout the contents of a graph modelling language (gml) file from the dependencies of some classes in the session)
-- dep_clear (close and delete the current analyzing session, BE ABSOLUTELY SURE that you want to delete your work! The tool does not ask!)
+- dep_close (close and delete the current analyzing session, BE ABSOLUTELY SURE that you want to delete your work! The tool does not ask!)
 
 Before you can call dep_init, you have to set some environment variables.
 You can configure make-env.sh and source it like this "source make-env.sh".
