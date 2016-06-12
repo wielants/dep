@@ -10,21 +10,21 @@ if [ ! -d "${DEP_ROOTDIR}" ]; then
 fi
 
 echo "# Dependencies for all classes"
-(cd "${DEP_ROOTDIR}" && cat * | sort -u | wc -l)
+(cd "${DEP_ROOTDIR}" && cat * | sort -u | wc -l | column -t)
 echo
 
 echo "# Dependent classes"
-(cd "${DEP_ROOTDIR}" && cat * | awk '{ print $3}' | sort -u | wc -l)
+(cd "${DEP_ROOTDIR}" && cat * | awk '{ print $3}' | sort -u | wc -l | column -t)
 echo
 
 echo "# Dependencies per class"
-(cd "${DEP_ROOTDIR}" && wc -l * | sort -nr)
+(cd "${DEP_ROOTDIR}" && ls * | xargs -n 1 wc -l  | sort -nr | column -t)
 echo
 
 echo "TOP-15 of the most frequent dependencies"
-(cd "${DEP_ROOTDIR}" && cat * | sort | uniq -c | sort -nr | head -n 15)
+(cd "${DEP_ROOTDIR}" && cat * | sort | uniq -c | sort -nr | head -n 15 | column -t)
 echo
 
 echo "TOP-15 of the most dependent classes"
-(cd "${DEP_ROOTDIR}" && cat * | awk '{print $3}' | sort | uniq -c | sort -nr | head -n 15)
+(cd "${DEP_ROOTDIR}" && cat * | awk '{print $3}' | sort | uniq -c | sort -nr | head -n 15 | column -t)
 echo
