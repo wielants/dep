@@ -15,12 +15,4 @@ for eachClass in "$@"; do {
    dep_add_internal "$eachClass"
 } done
 
-listOfClasses=$(mktemp)
-for eachClass in "$@"; do {
-  echo "$eachClass" >> "${listOfClasses}"
-} done
-
-# new classes minus existing classes
-grep -vFf <(find ${DEP_ROOTDIR}/ -type f | grep -vFf "${listOfClasses}" | xargs cat | awk '{print $3}' | sort -u) <(find ${DEP_ROOTDIR}/ -type f | grep -Ff "${listOfClasses}" | xargs cat | awk '{print $3}' | sort -u)
-
-rm "${listOfClasses}"
+dep_show_uniq "$@"

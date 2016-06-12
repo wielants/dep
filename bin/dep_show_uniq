@@ -1,0 +1,26 @@
+#!/bin/bash
+# returns unique dependencies for the given classes altogether
+
+set -e
+
+dep_check_internal
+
+if [ $# -eq 0 ]; then
+  echo "Usage: dep_show_uniq <className> ..."
+  exit 1
+fi
+
+if [ ! -d "${DEP_ROOTDIR}" ]; then
+  echo "Directory ${DEP_ROOTDIR} is missing"'!'" Run dep_init first"'!'
+  exit 1
+fi
+
+listOfClasses=$(mktemp)
+for eachClass in "$@"; do {
+  echo "$eachClass" >> "${listOfClasses}"
+} done
+
+# given classes minus other classes
+grep -vFf <(find ${DEP_ROOTDIR}/ -type f | grep -vFf "${listOfClasses}" | xargs cat | awk '{print $3}' | sort -u) <(find ${DEP_ROOTDIR}/ -type f | grep -Ff "${listOfClasses}" | xargs cat | awk '{print $3}' | sort -u)
+
+rm "${listOfClasses}"
