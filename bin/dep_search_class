@@ -10,10 +10,10 @@ if [ ! -d "${DEP_ROOTDIR}" ]; then
 fi
 
 if [ $# -eq 0 ]; then
-  echo "Usage: dep_search <regex>"
+  echo "Usage: dep_search_class <className>"
   exit 1
 fi
 
-readonly regex="$1"
+readonly className="$1"
 
-(cd "${DEP_ROOTDIR}" && grep --color -Hie "-> .*${regex}" *)
+(cd "${DEP_ROOTDIR}" && grep -lFe "-> ${className}" *)
