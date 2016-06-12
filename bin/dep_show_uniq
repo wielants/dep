@@ -15,6 +15,13 @@ if [ ! -d "${DEP_ROOTDIR}" ]; then
   exit 1
 fi
 
+for eachClass in "$@"; do {
+   if [ ! -f "${DEP_ROOTDIR}/${eachClass}" ]; then
+      echo "Class ${eachClass} does not exist"'!'
+      exit 1
+   fi
+} done
+
 listOfClasses=$(mktemp)
 for eachClass in "$@"; do {
   echo "$eachClass" >> "${listOfClasses}"
