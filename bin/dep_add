@@ -1,0 +1,26 @@
+#!/bin/bash
+# adds new classes and calculate dependencies
+# returns new dependencies
+
+set -e
+
+dep_check_internal
+
+if [ $# -eq 0 ]; then
+  echo "Usage: dep_add <className> ..."
+  exit 1
+fi
+
+for eachClass in "$@"; do {
+   dep_add_internal "$eachClass"
+} done
+
+listOfClasses=$(mktemp)
+for eachClass in "$@"; do {
+  echo "$eachClass" >> "${listOfClasses}"
+} done
+
+# new classes minus existing classes
+grep -vFf <(find ${DEP_ROOTDIR}/ -type f | grep -vFf "${listOfClasses}" | xargs cat | awk '{print $3}' | sort -u) <(find ${DEP_ROOTDIR}/ -type f | grep -Ff "${listOfClasses}" | xargs cat | awk '{print $3}' | sort -u)
+
+rm "${listOfClasses}"

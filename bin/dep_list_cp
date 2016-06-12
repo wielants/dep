@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+# lists all classes in DEP_CLASSPATH
+
+set -e
+
+dep_check_internal
+
+for eachClassPathEntry in $(echo "${DEP_CLASSPATH}" | tr ":" " "); do {
+  if [ -d "${eachClassPathEntry}" ]; then
+    (cd "${eachClassPathEntry}" 
+     find ./ -type f -name "*.class" \
+       | sed -e 's#^./##' \
+       | tr "/" "." \
+       | sed -e 's/\.class$//' \
+       | sed -e 's/^\([^\$]\+\)\$.*$/\1/' \
+       | sort -u
+    )
+  else
+    echo 'not implemented yet!'
+  fi
+} done

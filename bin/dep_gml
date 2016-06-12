@@ -1,0 +1,80 @@
+#!/bin/bash
+
+set -e
+
+dep_check_internal
+
+if [ ! -d "${DEP_ROOTDIR}" ]; then
+  echo "Directory ${DEP_ROOTDIR} is missing"'!'" Run dep_init first"'!'
+  exit 1
+fi
+
+if [ $# -eq 0 ]; then
+  (cd "${DEP_ROOTDIR}" && cat * | awk -f <(
+   cat << 'EOF'
+BEGIN {
+        nodenum=0;
+        print "graph [";
+        print "hierarchic 1";
+        print "directed 1";
+}
+function getNode (name) {
+        if (nodemap[name]=="") {
+                nodemap[name]=nodenum;
+                print "node [";
+                print "id " nodenum;
+                print "label \"" name "\"";
+                print "]";
+                nodenum++;
+        }
+        return nodemap[name];
+}
+{
+        targetnode=$2
+        srcnode=$1;
+        edges = edges "\n" "edge [";
+        edges = edges "\n" "source " getNode(srcnode);
+        edges = edges "\n" "target " getNode(targetnode);
+        edges = edges "\n" "]";
+}
+END {
+        print edges;
+        print "]";
+}
+EOF
+))
+else
+  (cd "${DEP_ROOTDIR}" && cat "$1" | awk -f <(
+   cat << 'EOF'
+BEGIN {
+        nodenum=0;
+        print "graph [";
+        print "hierarchic 1";
+        print "directed 1";
+}
+function getNode (name) {
+        if (nodemap[name]=="") {
+                nodemap[name]=nodenum;
+                print "node [";
+                print "id " nodenum;
+                print "label \"" name "\"";
+                print "]";
+                nodenum++;
+        }
+        return nodemap[name];
+}
+{
+        targetnode=$2
+        srcnode=$1;
+        edges = edges "\n" "edge [";
+        edges = edges "\n" "source " getNode(srcnode);
+        edges = edges "\n" "target " getNode(targetnode);
+        edges = edges "\n" "]";
+}
+END {
+        print edges;
+        print "]";
+}
+EOF
+))
+fi

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -e
+
+dep_check_internal
+
+if [ $# -eq 0 ]; then
+  echo "Usage: dep_add_internal <classname>"
+  exit 1
+fi
+
+if [ ! -d "${DEP_ROOTDIR}" ]; then
+  echo "Directory ${DEP_ROOTDIR} is missing"'!'" Run dep_init first"'!'
+  exit 1
+fi
+
+readonly className="$1"
+# FIXME: hack! DEP_CLASSPATH is only a sufficient filtering criteria if it is set to ONE directory ONLY!
+readonly filter="$(basename ${DEP_CLASSPATH})$"
+jdeps -v -R -cp "${DEP_CLASSPATH}" "${className}" \
+  | grep "${filter}" \
+  | sed -e "s/${filter}//" > "${DEP_ROOTDIR}/${className}"

@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [[ -z "${DEP_CLASSPATH}" ]]; then
+  echo 'Variable DEP_CLASSPATH not set!'
+  exit 1
+fi
+
+if [[ -z "${DEP_ROOTDIR}" ]]; then
+  echo 'Variable DEP_ROOTDIR not set!'
+  exit 1
+fi
+
+for eachClassPathEntry in $(echo "${DEP_CLASSPATH}" | tr ":" " "); do {
+  if [ ! -d "${eachClassPathEntry}" ]; then
+    echo "Classpath ${eachClassPathEntry} does not exist"'!'
+  fi
+} done
+
+jdeps_executable=$(which jdeps)
+
+if [[ -z "${jdeps_executable}" ]]; then
+  echo 'Could not find jdeps in classpath!'
+  exit 1
+fi

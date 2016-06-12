@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+
+if [ -d "${DEP_ROOTDIR}" ]; then
+  echo "Directory ${DEP_ROOTDIR} already exists"'!'" Run dep_clear first"'!'
+  exit 1
+fi
+
+mkdir "${DEP_ROOTDIR}"
+
+for eachClass in "$@"; do {
+   dep_add_internal "$eachClass"
+} done

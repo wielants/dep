@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -e
+
+dep_check_internal
+
+if [ ! -d "${DEP_ROOTDIR}" ]; then
+  echo "Directory ${DEP_ROOTDIR} is missing"'!'" Run dep_init first"'!'
+  exit 1
+fi
+
+rm -rf "${DEP_ROOTDIR}"
+

@@ -1,0 +1,33 @@
+#!/bin/bash
+# removes classes and calculate dependencies
+# returns removed dependencies
+
+set -e
+
+dep_check_internal
+
+if [ $# -eq 0 ]; then
+  echo "Usage: dep_rm <className> ..."
+  exit 1
+fi
+
+for eachClass in "$@"; do {
+   if [ ! -f "${DEP_ROOTDIR}/${eachClass}" ]; then
+      echo "Class ${eachClass} does not exist"'!'
+      exit 1
+   fi
+} done
+
+listOfClasses=$(mktemp)
+for eachClass in "$@"; do {
+  echo "$eachClass" >> "${listOfClasses}"
+} done
+
+# removed classes minus remaining classes
+grep -vFf <(find "${DEP_ROOTDIR}/" -type f | grep -vFf "${listOfClasses}" | xargs cat | awk '{print $3}' | sort -u) <(find "${DEP_ROOTDIR}/" -type f | grep -Ff "${listOfClasses}" | xargs cat | awk '{print $3}' | sort -u)
+
+rm "${listOfClasses}"
+
+for eachClass in "$@"; do {
+   rm "${DEP_ROOTDIR}/${eachClass}"
+} done

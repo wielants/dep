@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -e
+
+dep_check_internal
+
+if [ ! -d "${DEP_ROOTDIR}" ]; then
+  echo "Directory ${DEP_ROOTDIR} is missing"'!'" Run dep_init first"'!'
+  exit 1
+fi
+
+if [ $# -eq 0 ]; then
+(cd "${DEP_ROOTDIR}" && cat * | awk -f <(
+cat << 'EOF'
+BEGIN { print "digraph{" }
+{ print "\""$1"\" -> \""$3"\"" }
+END { print "}"}
+EOF
+))
+else
+(cd "${DEP_ROOTDIR}" && cat "$1" | awk -f <(
+cat << 'EOF'
+BEGIN { print "digraph{" }
+{ print "\""$1"\" -> \""$3"\"" }
+END { print "}"}
+EOF
+))
+fi

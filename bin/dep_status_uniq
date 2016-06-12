@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+
+dep_check_internal
+
+if [ ! -d "${DEP_ROOTDIR}" ]; then
+  echo "Directory ${DEP_ROOTDIR} is missing"'!'" Run dep_init first"'!'
+  exit 1
+fi
+
+echo "# Unique dependencies per class"
+(cd "${DEP_ROOTDIR}" && (
+  for eachClass in *; do {
+    uniqDependenciesPerClass=$(grep -vFf <(ls * | grep -vF "${eachClass}" | xargs cat | awk '{print $3}' | sort -u) <(cat "${eachClass}" | awk '{print $3}' | sort -u) | wc -l)
+    echo "${uniqDependenciesPerClass} ${eachClass}"
+  } done;
+)) | column -t | sort -nr
+echo
+
